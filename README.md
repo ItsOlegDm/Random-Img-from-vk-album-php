@@ -12,4 +12,5 @@ $arr = array_diff_key($arr['response']['items'][$rand_keys], array_flip($delete_
 sort($arr,SORT_NATURAL);
 $img = array_pop($arr);
 
-echo $img;```
+echo $img;
+```
