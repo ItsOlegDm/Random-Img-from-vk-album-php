@@ -1,16 +1,21 @@
 # Random-Img-from-vk-album
 Рандомная картинка из альбома vk
 ```
-$token = '';
-$owner_id = '';// перед id поставить минус, если это айди группы. 
-$album_id = '';
-
-$arr = json_decode(file_get_contents('https://api.vk.com/method/photos.get?owner_id=' . $owner_id . '&album_id=' . $album_id . '&v=5.37&access_token=' . $token), true);
-$rand_keys = array_rand($arr['response']['items']);
-$delete_keys = array('album_id', 'date', 'id', 'owner_id', 'has_tags', 'height', 'text', 'user_id', 'width');
-$arr = array_diff_key($arr['response']['items'][$rand_keys], array_flip($delete_keys));
-sort($arr,SORT_NATURAL);
-$img = array_pop($arr);
-
-echo $img;
+function getimg($id, $album_id, $token) { // $id - айди владельца альбома. Если владелец это паблик, вначале поставить минус.
+    $domain = 'https://api.vk.com';
+    $count = json_decode(file_get_contents($domain . '/method/photos.get?owner_id='. $id. '&album_id='.$album_id.'&v=5.81&access_token=' .$noken. '&count=0'), true);
+    $randnum = random_int(1, $count['response']['count']);
+    $resp = json_decode(file_get_contents($domain . '/method/photos.get?owner_id='. $id. '&album_id='.$album_id.'&v=5.81&access_token=' .$token. '&count=1&offset=' . $randnum), true);
+    $arr2= $resp['response']['items']['0']['sizes'];
+    $arr3= array();
+    foreach ($arr2 as $json) {
+        array_push($arr3, $json['height']);
+    }
+    $max_width = max($arr3);
+    foreach ($arr2 as $json) {
+        if ($json['height'] == $max_width) {
+            return($json['url']);
+        }
+    }
+}
 ```
